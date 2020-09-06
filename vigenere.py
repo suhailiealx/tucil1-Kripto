@@ -74,6 +74,7 @@ def rand_full_vigenere_square() :
 
 
 def vigenere(n, K, P) : 
+    cipher = []
     key = str.lower(K)
     plain = str.lower(P)
     pos_key = find_pos(key)
@@ -112,6 +113,7 @@ def vigenere(n, K, P) :
 
 
 def full_vigenere(n, K, P) :
+    cipher = []
     key = str.lower(K)
     plain = str.lower(P)
     pos_key = find_pos(key)
@@ -171,6 +173,7 @@ def full_vigenere(n, K, P) :
 
 
 def auto_key_vigenere(n, K, P) : 
+    cipher = []
     key = str.lower(K)
     plain = str.lower(P)
     pos_key = find_pos(key)
@@ -205,6 +208,7 @@ def auto_key_vigenere(n, K, P) :
 
 
 def extended_vigenere(n, K, P) : 
+    cipher = []
     pos_key = find_pos_ascii(K)
     pos_text = find_pos_ascii(P)                                      
     
@@ -241,6 +245,7 @@ def extended_vigenere(n, K, P) :
 
 
 def super_enkripsi(n, K, P) :
+    cipher = []
     if (n == 1) :
         first_enkripsi = vigenere(n, K, P)
         return (transposisi(n, first_enkripsi))
@@ -250,6 +255,7 @@ def super_enkripsi(n, K, P) :
 
 
 def transposisi(n, text) :
+    cipher = []
     text = str.lower(text)
 
     if (n == 1) :
