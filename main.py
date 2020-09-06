@@ -1,16 +1,21 @@
 from tkinter import *
 from vigenere import *
+from tkinter import filedialog
 
 
 # selected_algoritm = 0
 
 class Application(Frame):
     selected_algoritm = 0
+    output_type = 0
+    filename = ""
+    f = ""
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.pack()
         self.createWidgets()
+        self.resetSquare()
 
     def createWidgets(self):
         # RadioButton
@@ -23,7 +28,7 @@ class Application(Frame):
         R2.pack( anchor = W )
 
         R3 = Radiobutton(root, text="Auto-key Vigenere Cipher", variable=var, value=3, command = lambda : self.getScript(R3))
-        R3.pack( anchor = W)
+        R3.pack( anchor = W )
 
         R4 = Radiobutton(root, text="Expanded Vigenere Cipher", variable=var, value=4, command = lambda : self.getScript(R4))
         R4.pack( anchor = W )
@@ -32,7 +37,7 @@ class Application(Frame):
         R5.pack( anchor = W )
 
         R6 = Radiobutton(root, text="Super Enkripsi", variable=var, value=6, command = lambda : self.getScript(R6))
-        R6.pack( anchor = W)
+        R6.pack( anchor = W )
 
         R7 = Radiobutton(root, text="Affine Cipher", variable=var, value=7, command = lambda : self.getScript(R7))
         R7.pack( anchor = W )
@@ -41,7 +46,15 @@ class Application(Frame):
         R8.pack( anchor = W )
 
         R9 = Radiobutton(root, text="Enigma Cipher", variable=var, value=9, command = lambda : self.getScript(R9))
-        R9.pack( anchor = W)
+        R9.pack( anchor = W )
+
+
+        # RadioButton pilihan output
+        P1 = Radiobutton(root, text="Tanpa Spasi", value=0, command = lambda : self.getOutputType(P1))
+        P1.pack( anchor = W, side="right")
+
+        P2 = Radiobutton(root, text="Kelompok 5 huruf", value=1, command = lambda : self.getOutputType(P2))
+        P2.pack( anchor = W, side="right")
 
 
         # Field Edit Plaintext
@@ -58,6 +71,10 @@ class Application(Frame):
         self.Edit_key = Text(self, width=25, height=2, font=("Helvetica", 8 ))
         self.Edit_key.pack(anchor = W)
 
+        # Button to reset vigenere square (only for full vigenere)
+        self.Reset_Square = Button(self, text = "Reset Vigenere Square (only for full vigenere)", command= lambda : self.resetSquare())
+        self.Reset_Square.pack(anchor = W, pady = 5)
+
         # Field Edit Ciphertext
         self.Text_ciphertext = Label(self, text = "Enter the ciphertext")
         self.Text_ciphertext.pack(anchor = W)
@@ -73,11 +90,25 @@ class Application(Frame):
         self.Button_decrypt = Button(self, text = "Decrypt Text", command= lambda : self.runDecrypt())
         self.Button_decrypt.pack(pady = 5, padx = 5, side = "left")
 
+        # Button load file
+        self.Button_load = Button(self, text = "Load File", command= lambda : self.onOpen())
+        self.Button_load.pack(pady = 5, padx = 5, side = "right")
+
+        # Button save file
+        self.Button_save = Button(self, text = "Save File", command= lambda : self.writeFile())
+        self.Button_save.pack(pady = 5, padx = 5, side = "right")
+
 
     def getScript(self, Rb):
         print(Rb["text"])
         self.selected_algoritm = Rb["value"]
         
+    def getOutputType(self, Rb):
+        print(Rb["text"])
+        self.output_type = Rb["value"]
+        
+    def resetSquare(self):
+        rand_full_vigenere_square()
 
     def runEncrypt(self):
         key = self.Edit_key.get("1.0",'end-1c')
@@ -92,7 +123,7 @@ class Application(Frame):
         if (self.selected_algoritm == 1) :
             ciphertext = vigenere(1, K, P)
         elif (self.selected_algoritm == 2) :
-            pass
+            ciphertext = full_vigenere(1, K, P)
         elif (self.selected_algoritm == 3) :
             ciphertext = auto_key_vigenere(1, K, P)
         elif (self.selected_algoritm == 4) :
@@ -117,26 +148,26 @@ class Application(Frame):
 
     def runDecrypt(self):
         key = self.Edit_key.get("1.0",'end-1c')
-        ciphertext = self.Edit_ciphertext.get("1.0",'end-1c')
+        plaintext = self.Edit_plaintext.get("1.0",'end-1c')
 
-        plaintext = ""
+        ciphertext = ""
 
         if (self.selected_algoritm != 4) :
             K = key.replace(" ", "")
-            P = ciphertext.replace(" ", "")
+            P = plaintext.replace(" ", "")
 
         if (self.selected_algoritm == 1) :
-            plaintext = vigenere(-1, K, P)
+            ciphertext = vigenere(-1, K, P)
         elif (self.selected_algoritm == 2) :
-            pass
+            ciphertext = full_vigenere(-1, K, P)
         elif (self.selected_algoritm == 3) :
-            plaintext = auto_key_vigenere(-1, K, P)
+            ciphertext = auto_key_vigenere(-1, K, P)
         elif (self.selected_algoritm == 4) :
-            plaintext = extended_vigenere(-1, K, P)
+            ciphertext = extended_vigenere(-1, K, P)
         elif (self.selected_algoritm == 5) :
             pass
         elif (self.selected_algoritm == 6) :
-            plaintext = super_enkripsi(-1, K, P)
+            ciphertext = super_enkripsi(-1, K, P)
         elif (self.selected_algoritm == 7) :
             pass
         elif (self.selected_algoritm == 8) :
@@ -146,16 +177,39 @@ class Application(Frame):
         else:
             print("Select the algorithm first !!")
 
-        if (plaintext != ""):
+        if (ciphertext != ""):
+            self.Edit_plaintext.delete('1.0',END)
+            self.Edit_ciphertext.delete('1.0',END)
+            self.Edit_ciphertext.insert('1.0',ciphertext)
+
+    def onOpen(self):
+        fl = filedialog.askopenfilename(title = "Select file",filetypes = (("text files","*.txt"),("all files","*.*")))
+
+        if fl != '':
+            text = self.readFile(fl)
+            self.filename = fl
             self.Edit_ciphertext.delete('1.0',END)
             self.Edit_plaintext.delete('1.0',END)
-            self.Edit_plaintext.insert('1.0',plaintext)
+            self.Edit_plaintext.insert(END, text)
+
+    def readFile(self, filename):
+        self.f = open(filename, "r+")
+        text = self.f.read()
+        return text
+
+    def writeFile(self):
+        self.f = open(self.filename, "w+")
+        rewrite = self.f.write(self.Edit_ciphertext.get("1.0",'end-1c'))
+        if (rewrite) :
+            print("File berhasil disimpan")
+        self.f.close()
+
 
 
 
 root = Tk()
 app = Application(master=root)
 app.master.title("Kriptografi Encrypt Decrypt Application")
-app.master.geometry("500x500")
+app.master.geometry("550x550")
 app.mainloop()
 root.destroy()

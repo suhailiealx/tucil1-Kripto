@@ -68,6 +68,7 @@ def rand_full_vigenere_square() :
     # vigenere_square = []
     for _ in range(0, letters_len) :
         vigenere_square.append(random.sample(letters, letters_len))
+    print("Full vigenere square berhasil di reset")
 
 
 
