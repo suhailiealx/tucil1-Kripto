@@ -3,10 +3,10 @@ from vigenere import *
 from tkinter import filedialog
 
 
-# selected_algoritm = 0
+# selected_algorithm = 0
 
 class Application(Frame):
-    selected_algoritm = 0
+    selected_algorithm = 0
     output_type = 0
     filename = ""
     f = ""
@@ -30,7 +30,7 @@ class Application(Frame):
         R3 = Radiobutton(root, text="Auto-key Vigenere Cipher", variable=var, value=3, command = lambda : self.getScript(R3))
         R3.pack( anchor = W )
 
-        R4 = Radiobutton(root, text="Expanded Vigenere Cipher", variable=var, value=4, command = lambda : self.getScript(R4))
+        R4 = Radiobutton(root, text="Extended Vigenere Cipher", variable=var, value=4, command = lambda : self.getScript(R4))
         R4.pack( anchor = W )
 
         R5 = Radiobutton(root, text="Playfair Cipher", variable=var, value=5, command = lambda : self.getScript(R5))
@@ -101,7 +101,7 @@ class Application(Frame):
 
     def getScript(self, Rb):
         print(Rb["text"])
-        self.selected_algoritm = Rb["value"]
+        self.selected_algorithm = Rb["value"]
         
     def getOutputType(self, Rb):
         print(Rb["text"])
@@ -116,27 +116,30 @@ class Application(Frame):
 
         ciphertext = ""
 
-        if (self.selected_algoritm != 4) :
+        if (self.selected_algorithm != 4) :
             K = key.replace(" ", "")
             P = plaintext.replace(" ", "")
+        else:
+            K = key
+            P = plaintext
 
-        if (self.selected_algoritm == 1) :
+        if (self.selected_algorithm == 1) :
             ciphertext = vigenere(1, K, P)
-        elif (self.selected_algoritm == 2) :
+        elif (self.selected_algorithm == 2) :
             ciphertext = full_vigenere(1, K, P)
-        elif (self.selected_algoritm == 3) :
+        elif (self.selected_algorithm == 3) :
             ciphertext = auto_key_vigenere(1, K, P)
-        elif (self.selected_algoritm == 4) :
+        elif (self.selected_algorithm == 4) :
             ciphertext = extended_vigenere(1, K, P)
-        elif (self.selected_algoritm == 5) :
+        elif (self.selected_algorithm == 5) :
             pass
-        elif (self.selected_algoritm == 6) :
+        elif (self.selected_algorithm == 6) :
             ciphertext = super_enkripsi(1, K, P)
-        elif (self.selected_algoritm == 7) :
+        elif (self.selected_algorithm == 7) :
             pass
-        elif (self.selected_algoritm == 8) :
+        elif (self.selected_algorithm == 8) :
             pass
-        elif (self.selected_algoritm == 9) :
+        elif (self.selected_algorithm == 9) :
             pass
         else:
             print("Select the algorithm first !!")
@@ -152,27 +155,30 @@ class Application(Frame):
 
         ciphertext = ""
 
-        if (self.selected_algoritm != 4) :
+        if (self.selected_algorithm != 4) :
             K = key.replace(" ", "")
             P = plaintext.replace(" ", "")
+        else:
+            K = key
+            P = plaintext
 
-        if (self.selected_algoritm == 1) :
+        if (self.selected_algorithm == 1) :
             ciphertext = vigenere(-1, K, P)
-        elif (self.selected_algoritm == 2) :
+        elif (self.selected_algorithm == 2) :
             ciphertext = full_vigenere(-1, K, P)
-        elif (self.selected_algoritm == 3) :
+        elif (self.selected_algorithm == 3) :
             ciphertext = auto_key_vigenere(-1, K, P)
-        elif (self.selected_algoritm == 4) :
+        elif (self.selected_algorithm == 4) :
             ciphertext = extended_vigenere(-1, K, P)
-        elif (self.selected_algoritm == 5) :
+        elif (self.selected_algorithm == 5) :
             pass
-        elif (self.selected_algoritm == 6) :
+        elif (self.selected_algorithm == 6) :
             ciphertext = super_enkripsi(-1, K, P)
-        elif (self.selected_algoritm == 7) :
+        elif (self.selected_algorithm == 7) :
             pass
-        elif (self.selected_algoritm == 8) :
+        elif (self.selected_algorithm == 8) :
             pass
-        elif (self.selected_algoritm == 9) :
+        elif (self.selected_algorithm == 9) :
             pass
         else:
             print("Select the algorithm first !!")

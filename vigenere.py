@@ -65,11 +65,10 @@ def find_pos_full(value) :
 
 
 def rand_full_vigenere_square() :
-    # vigenere_square = []
+    vigenere_square.clear()
     for _ in range(0, letters_len) :
         vigenere_square.append(random.sample(letters, letters_len))
     print("Full vigenere square berhasil di reset")
-
 
 
 
@@ -118,8 +117,7 @@ def full_vigenere(n, K, P) :
     key = str.lower(K)
     plain = str.lower(P)
     pos_key = find_pos(key)
-    pos_text = find_pos(plain)
-    cipher = []                                      
+    pos_text = find_pos(plain)                                    
     
     if len(pos_key) > len(pos_text) :
             range_list = pos_key
@@ -133,8 +131,11 @@ def full_vigenere(n, K, P) :
     if (n == 1) :
         while i<len(range_list) and j<len(range_list) and loop_pass<len(pos_text) :      
             try :
-                print("Pos : ", pos_key[i], pos_text[j])
-                cipher.append(vigenere_square[pos_key[i]][pos_text[j]])
+                print(vigenere_square)
+                print("pos_key : ", pos_key[i])
+                print("pos_text : ", pos_text[j])
+                aa = vigenere_square[pos_key[i]][pos_text[j]]
+                cipher.append(aa)
 
                 i = i+1
                 j = j+1
@@ -242,6 +243,7 @@ def extended_vigenere(n, K, P) :
             print("Oops Something went wrong")
     
     result = "".join(cipher)
+    print(result)
     return(result)
 
 
