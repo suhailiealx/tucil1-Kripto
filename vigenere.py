@@ -131,9 +131,6 @@ def full_vigenere(n, K, P) :
     if (n == 1) :
         while i<len(range_list) and j<len(range_list) and loop_pass<len(pos_text) :      
             try :
-                print(vigenere_square)
-                print("pos_key : ", pos_key[i])
-                print("pos_text : ", pos_text[j])
                 aa = vigenere_square[pos_key[i]][pos_text[j]]
                 cipher.append(aa)
 
@@ -243,7 +240,6 @@ def extended_vigenere(n, K, P) :
             print("Oops Something went wrong")
     
     result = "".join(cipher)
-    print(result)
     return(result)
 
 

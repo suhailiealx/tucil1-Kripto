@@ -1,6 +1,7 @@
 from tkinter import *
 from vigenere import *
 from tkinter import filedialog
+import binascii
 
 
 # selected_algorithm = 0
@@ -189,23 +190,27 @@ class Application(Frame):
             self.Edit_ciphertext.insert('1.0',ciphertext)
 
     def onOpen(self):
-        fl = filedialog.askopenfilename(title = "Select file",filetypes = (("text files","*.txt"),("all files","*.*")))
+        fl = filedialog.askopenfilename(title = "Select file",filetypes = [("all files","*.*")])
 
         if fl != '':
             text = self.readFile(fl)
             self.filename = fl
+            text = text.decode('iso8859-1')
+
+
             self.Edit_ciphertext.delete('1.0',END)
             self.Edit_plaintext.delete('1.0',END)
             self.Edit_plaintext.insert(END, text)
 
     def readFile(self, filename):
-        self.f = open(filename, "r+")
+        self.f = open(filename, "rb")
         text = self.f.read()
         return text
 
     def writeFile(self):
-        self.f = open(self.filename, "w+")
-        rewrite = self.f.write(self.Edit_ciphertext.get("1.0",'end-1c'))
+        self.f = open("output", "wb")
+        bytearray = self.Edit_ciphertext.get("1.0",'end-1c').encode('iso8859-1')
+        rewrite = self.f.write(bytearray)
         if (rewrite) :
             print("File berhasil disimpan")
         self.f.close()
