@@ -48,16 +48,13 @@ class Application(Frame):
         R8 = Radiobutton(root, text="Hill Cipher", variable=var, value=8, command = lambda : self.getScript(R8))
         R8.pack( anchor = W )
 
-        R9 = Radiobutton(root, text="Enigma Cipher", variable=var, value=9, command = lambda : self.getScript(R9))
-        R9.pack( anchor = W )
-
 
         # RadioButton pilihan output
-        P1 = Radiobutton(root, text="Tanpa Spasi", value=0, command = lambda : self.getOutputType(P1))
-        P1.pack( anchor = W, side="right")
-
         P2 = Radiobutton(root, text="Kelompok 5 huruf", value=1, command = lambda : self.getOutputType(P2))
         P2.pack( anchor = W, side="right")
+
+        P1 = Radiobutton(root, text="Tanpa Spasi", value=0, command = lambda : self.getOutputType(P1))
+        P1.pack( anchor = W, side="right")
 
 
         # Field Edit Plaintext
@@ -248,7 +245,7 @@ class Application(Frame):
         return text
 
     def writeFile(self):
-        self.f = open("output", "wb")
+        self.f = open(self.filename, "wb")
         bytearray = self.Edit_ciphertext.get("1.0",'end-1c').encode('iso8859-1')
         rewrite = self.f.write(bytearray)
         if (rewrite) :
@@ -261,6 +258,6 @@ class Application(Frame):
 root = Tk()
 app = Application(master=root)
 app.master.title("Kriptografi Encrypt Decrypt Application")
-app.master.geometry("550x550")
+app.master.geometry("550x650")
 app.mainloop()
 root.destroy()
