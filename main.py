@@ -13,6 +13,8 @@ class Application(Frame):
     output_type = 0
     filename = ""
     f = ""
+    alert_text = ""
+    Alert_label = ""
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
@@ -96,6 +98,12 @@ class Application(Frame):
         self.Edit_ciphertext = Text(self, width=80, height=5, font=("Helvetica", 8 ))
         self.Edit_ciphertext.pack(anchor = W)
 
+        
+        # Alert Text
+        self.Alert_label = Label(self, text = self.alert_text, foreground = "red")
+        self.Alert_label.pack(anchor = W)
+
+
         # Button to Encrypt
         self.Button_encrypt = Button(self, text = "Encrypt Text", command= lambda : self.runEncrypt())
         self.Button_encrypt.pack(pady = 5, padx = 5, side = "left")
@@ -104,19 +112,24 @@ class Application(Frame):
         self.Button_decrypt = Button(self, text = "Decrypt Text", command= lambda : self.runDecrypt())
         self.Button_decrypt.pack(pady = 5, padx = 5, side = "left")
 
-        # Button load file
-        self.Button_load = Button(self, text = "Load File", command= lambda : self.onOpen())
-        self.Button_load.pack(pady = 5, padx = 5, side = "right")
 
         # Button save file
         self.Button_save = Button(self, text = "Save File", command= lambda : self.writeFile())
         self.Button_save.pack(pady = 5, padx = 5, side = "right")
 
+        # Button load file
+        self.Button_load = Button(self, text = "Load File", command= lambda : self.onOpen())
+        self.Button_load.pack(pady = 5, padx = 5, side = "right")
+
+        
 
     def getScript(self, Rb):
         print(Rb["text"])
         self.selected_algorithm = Rb["value"]
-        
+        self.alert_text = ""
+        self.Alert_label.config(text = self.alert_text)
+
+
     def getOutputType(self, Rb):
         print(Rb["text"])
         self.output_type = Rb["value"]
@@ -147,26 +160,33 @@ class Application(Frame):
             SN = int(shift)
             PN = int(prime)
 
-        if (self.selected_algorithm == 1) :
-            ciphertext = vigenere(1, K, P)
-        elif (self.selected_algorithm == 2) :
-            ciphertext = full_vigenere(1, K, P)
-        elif (self.selected_algorithm == 3) :
-            ciphertext = auto_key_vigenere(1, K, P)
-        elif (self.selected_algorithm == 4) :
-            ciphertext = extended_vigenere(1, K, P)
-        elif (self.selected_algorithm == 5) :
-            ciphertext = encryptPlayfair(P, ciphertext, K)
-        elif (self.selected_algorithm == 6) :
-            ciphertext = super_enkripsi(1, K, P)
-        elif (self.selected_algorithm == 7) :
-            ciphertext = encryptAffine(P,ciphertext, PN, SN)
-        elif (self.selected_algorithm == 8) :
-            ciphertext = encryptHill(P, ciphertext, K)
-        elif (self.selected_algorithm == 9) :
-            pass
-        else:
-            print("Select the algorithm first !!")
+        if (K != '') :
+            if (self.selected_algorithm == 1) :
+                ciphertext = vigenere(1, K, P)
+            elif (self.selected_algorithm == 2) :
+                ciphertext = full_vigenere(1, K, P)
+            elif (self.selected_algorithm == 3) :
+                ciphertext = auto_key_vigenere(1, K, P)
+            elif (self.selected_algorithm == 4) :
+                ciphertext = extended_vigenere(1, K, P)
+            elif (self.selected_algorithm == 5) :
+                ciphertext = encryptPlayfair(P, ciphertext, K)
+            elif (self.selected_algorithm == 6) :
+                ciphertext = super_enkripsi(1, K, P)
+            elif (self.selected_algorithm == 7) :
+                ciphertext = encryptAffine(P,ciphertext, PN, SN)
+            elif (self.selected_algorithm == 8) :
+                ciphertext = encryptHill(P, ciphertext, K)
+            elif (self.selected_algorithm == 9) :
+                pass
+            else:
+                print("Select the algorithm first !!")
+                self.alert_text = "Select the algorithm first !!"
+                self.Alert_label.config(text = self.alert_text)
+        else :
+            print("Enter the key first !!")
+            self.alert_text = "Enter the key first !!"
+            self.Alert_label.config(text = self.alert_text)
 
         if (self.output_type == 1) :
             ciphertext = fiveGroup(ciphertext, 5)
@@ -200,26 +220,33 @@ class Application(Frame):
             SN = int(shift)
             PN = int(prime)
 
-        if (self.selected_algorithm == 1) :
-            ciphertext = vigenere(-1, K, P)
-        elif (self.selected_algorithm == 2) :
-            ciphertext = full_vigenere(-1, K, P)
-        elif (self.selected_algorithm == 3) :
-            ciphertext = auto_key_vigenere(-1, K, P)
-        elif (self.selected_algorithm == 4) :
-            ciphertext = extended_vigenere(-1, K, P)
-        elif (self.selected_algorithm == 5) :
-            ciphertext = decryptPlayfair(ciphertext, P, K)
-        elif (self.selected_algorithm == 6) :
-            ciphertext = super_enkripsi(-1, K, P)
-        elif (self.selected_algorithm == 7) :
-            ciphertext = decryptAffine(ciphertext, P, PN, SN)
-        elif (self.selected_algorithm == 8) :
-            ciphertext = decryptHill(ciphertext, P, K)
-        elif (self.selected_algorithm == 9) :
-            pass
-        else:
-            print("Select the algorithm first !!")
+        if (K != '') :
+            if (self.selected_algorithm == 1) :
+                ciphertext = vigenere(-1, K, P)
+            elif (self.selected_algorithm == 2) :
+                ciphertext = full_vigenere(-1, K, P)
+            elif (self.selected_algorithm == 3) :
+                ciphertext = auto_key_vigenere(-1, K, P)
+            elif (self.selected_algorithm == 4) :
+                ciphertext = extended_vigenere(-1, K, P)
+            elif (self.selected_algorithm == 5) :
+                ciphertext = decryptPlayfair(ciphertext, P, K)
+            elif (self.selected_algorithm == 6) :
+                ciphertext = super_enkripsi(-1, K, P)
+            elif (self.selected_algorithm == 7) :
+                ciphertext = decryptAffine(ciphertext, P, PN, SN)
+            elif (self.selected_algorithm == 8) :
+                ciphertext = decryptHill(ciphertext, P, K)
+            elif (self.selected_algorithm == 9) :
+                pass
+            else:
+                print("Select the algorithm first !!")
+                self.alert_text = "Select the algorithm first !!"
+                self.Alert_label.config(text = self.alert_text)
+        else :
+            print("Enter the key first !!")
+            self.alert_text = "Enter the key first !!"
+            self.Alert_label.config(text = self.alert_text)
 
         if (ciphertext != ""):
             self.Edit_plaintext.delete('1.0',END)
@@ -258,6 +285,6 @@ class Application(Frame):
 root = Tk()
 app = Application(master=root)
 app.master.title("Kriptografi Encrypt Decrypt Application")
-app.master.geometry("550x650")
+app.master.geometry("550x660")
 app.mainloop()
 root.destroy()
