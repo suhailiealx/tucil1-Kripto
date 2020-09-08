@@ -1,7 +1,9 @@
 from tkinter import *
 from vigenere import *
+from playfair import *
 from tkinter import filedialog
 import binascii
+import re
 
 
 # selected_algorithm = 0
@@ -59,7 +61,7 @@ class Application(Frame):
 
 
         # Field Edit Plaintext
-        self.Text_plaintext = Label(self, text = "Enter the plaintext")
+        self.Text_plaintext = Label(self, text = "Enter the input (Plaintext for encrypt, ciphertext for decrypt)")
         self.Text_plaintext.pack(anchor = W)
 
         self.Edit_plaintext = Text(self, width=80, height=5, font=("Helvetica", 8 ))
@@ -72,12 +74,26 @@ class Application(Frame):
         self.Edit_key = Text(self, width=25, height=2, font=("Helvetica", 8 ))
         self.Edit_key.pack(anchor = W)
 
+        # Field Edit Shift
+        self.Text_key = Label(self, text = "Enter the shift number")
+        self.Text_key.pack(anchor = W)
+
+        self.Shift_key = Text(self, width=25, height=2, font=("Helvetica", 8 ))
+        self.Shift_key.pack(anchor = W)
+
+        # Field Edit Prime
+        self.Text_key = Label(self, text = "Enter the prime number")
+        self.Text_key.pack(anchor = W)
+
+        self.Prime_key = Text(self, width=25, height=2, font=("Helvetica", 8 ))
+        self.Prime_key.pack(anchor = W)
+
         # Button to reset vigenere square (only for full vigenere)
         self.Reset_Square = Button(self, text = "Reset Vigenere Square (only for full vigenere)", command= lambda : self.resetSquare())
         self.Reset_Square.pack(anchor = W, pady = 5)
 
         # Field Edit Ciphertext
-        self.Text_ciphertext = Label(self, text = "Enter the ciphertext")
+        self.Text_ciphertext = Label(self, text = "The output (Ciphertext for encrypt, plaintext for decrypt)")
         self.Text_ciphertext.pack(anchor = W)
 
         self.Edit_ciphertext = Text(self, width=80, height=5, font=("Helvetica", 8 ))
@@ -114,15 +130,25 @@ class Application(Frame):
     def runEncrypt(self):
         key = self.Edit_key.get("1.0",'end-1c')
         plaintext = self.Edit_plaintext.get("1.0",'end-1c')
+        shift = self.Shift_key.get("1.0",'end-1c')
+        prime = self.Prime_key.get("1.0",'end-1c')
 
         ciphertext = ""
 
         if (self.selected_algorithm != 4) :
-            K = key.replace(" ", "")
             P = plaintext.replace(" ", "")
+            if (self.selected_algorithm == 8) :
+                K = key
+                K = re.findall('\d+', K)
+            else :
+                K = key.replace(" ", "")
         else:
             K = key
             P = plaintext
+
+        if (shift!='') and (prime!='') :
+            SN = int(shift)
+            PN = int(prime)
 
         if (self.selected_algorithm == 1) :
             ciphertext = vigenere(1, K, P)
@@ -133,17 +159,20 @@ class Application(Frame):
         elif (self.selected_algorithm == 4) :
             ciphertext = extended_vigenere(1, K, P)
         elif (self.selected_algorithm == 5) :
-            pass
+            ciphertext = encryptPlayfair(P, ciphertext, K)
         elif (self.selected_algorithm == 6) :
             ciphertext = super_enkripsi(1, K, P)
         elif (self.selected_algorithm == 7) :
-            pass
+            ciphertext = encryptAffine(P,ciphertext, PN, SN)
         elif (self.selected_algorithm == 8) :
-            pass
+            ciphertext = encryptHill(P, ciphertext, K)
         elif (self.selected_algorithm == 9) :
             pass
         else:
             print("Select the algorithm first !!")
+
+        if (self.output_type == 1) :
+            ciphertext = fiveGroup(ciphertext, 5)
 
         if (ciphertext != ""):
             self.Edit_plaintext.delete('1.0',END)
@@ -153,15 +182,26 @@ class Application(Frame):
     def runDecrypt(self):
         key = self.Edit_key.get("1.0",'end-1c')
         plaintext = self.Edit_plaintext.get("1.0",'end-1c')
+        shift = self.Shift_key.get("1.0",'end-1c')
+        prime = self.Prime_key.get("1.0",'end-1c')
 
         ciphertext = ""
 
         if (self.selected_algorithm != 4) :
-            K = key.replace(" ", "")
             P = plaintext.replace(" ", "")
+            if (self.selected_algorithm == 8) :
+                K = key
+                K = re.findall('\d+', K)
+            else :
+                K = key.replace(" ", "")
         else:
             K = key
             P = plaintext
+
+
+        if (shift!='') and (prime!='') :
+            SN = int(shift)
+            PN = int(prime)
 
         if (self.selected_algorithm == 1) :
             ciphertext = vigenere(-1, K, P)
@@ -172,13 +212,13 @@ class Application(Frame):
         elif (self.selected_algorithm == 4) :
             ciphertext = extended_vigenere(-1, K, P)
         elif (self.selected_algorithm == 5) :
-            pass
+            ciphertext = decryptPlayfair(ciphertext, P, K)
         elif (self.selected_algorithm == 6) :
             ciphertext = super_enkripsi(-1, K, P)
         elif (self.selected_algorithm == 7) :
-            pass
+            ciphertext = decryptAffine(ciphertext, P, PN, SN)
         elif (self.selected_algorithm == 8) :
-            pass
+            ciphertext = decryptHill(ciphertext, P, K)
         elif (self.selected_algorithm == 9) :
             pass
         else:
