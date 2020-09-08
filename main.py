@@ -67,21 +67,21 @@ class Application(Frame):
         self.Edit_plaintext.pack(anchor = W)
 
         # Field Edit Key
-        self.Text_key = Label(self, text = "Enter the key")
+        self.Text_key = Label(self, text = "Enter the key (for Hill Cipher,the key format : k11 k12 k13 k21 .... k33)")
         self.Text_key.pack(anchor = W)
 
         self.Edit_key = Text(self, width=25, height=2, font=("Helvetica", 8 ))
         self.Edit_key.pack(anchor = W)
 
         # Field Edit Shift
-        self.Text_key = Label(self, text = "Enter the shift number")
+        self.Text_key = Label(self, text = "Enter the shift number (for Affine Cipher)")
         self.Text_key.pack(anchor = W)
 
         self.Shift_key = Text(self, width=25, height=2, font=("Helvetica", 8 ))
         self.Shift_key.pack(anchor = W)
 
         # Field Edit Prime
-        self.Text_key = Label(self, text = "Enter the prime number")
+        self.Text_key = Label(self, text = "Enter the prime number (for Affine Cipher)")
         self.Text_key.pack(anchor = W)
 
         self.Prime_key = Text(self, width=25, height=2, font=("Helvetica", 8 ))
@@ -160,7 +160,7 @@ class Application(Frame):
             SN = int(shift)
             PN = int(prime)
 
-        if (K != '') :
+        if (K != '') or (self.selected_algorithm == 7) :
             if (self.selected_algorithm == 1) :
                 ciphertext = vigenere(1, K, P)
             elif (self.selected_algorithm == 2) :
@@ -190,6 +190,8 @@ class Application(Frame):
 
         if (self.output_type == 1) :
             ciphertext = fiveGroup(ciphertext, 5)
+        elif (self.output_type == 0) :
+            ciphertext = ciphertext.replace(" ","")
 
         if (ciphertext != ""):
             self.Edit_plaintext.delete('1.0',END)
@@ -220,7 +222,7 @@ class Application(Frame):
             SN = int(shift)
             PN = int(prime)
 
-        if (K != '') :
+        if (K != '') or (self.selected_algorithm == 7) :
             if (self.selected_algorithm == 1) :
                 ciphertext = vigenere(-1, K, P)
             elif (self.selected_algorithm == 2) :
@@ -247,7 +249,7 @@ class Application(Frame):
             print("Enter the key first !!")
             self.alert_text = "Enter the key first !!"
             self.Alert_label.config(text = self.alert_text)
-
+        
         if (ciphertext != ""):
             self.Edit_plaintext.delete('1.0',END)
             self.Edit_ciphertext.delete('1.0',END)

@@ -32,6 +32,7 @@ def encryptPlayfair(plaintext, ciphertext, playfair_key) :
     playfair_bigram_list = []
 
     plaintext = plaintext.replace(' ','').replace('j','i').replace('J','I').replace('!','').replace('.','').replace('/','').replace('?','')
+    plaintext = plaintext.lower()
     playfair_key_matrix = generateKeyMatrixPlayfair(playfair_key_matrix,playfair_key)
 
     i=0
@@ -83,6 +84,7 @@ def decryptPlayfair(plaintext, ciphertext, playfair_key) :
     playfair_bigram_list = []
 
     playfair_key_matrix = generateKeyMatrixPlayfair(playfair_key_matrix,playfair_key)
+    ciphertext = ciphertext.replace(" ","")
 
     while (i < len(ciphertext)) :
         bigram_cipher = ciphertext[i:i+2]
@@ -124,6 +126,7 @@ def encryptAffine(plaintext, ciphertext, m_prime, b_shift) :
     alphabet = "abcdefghijklmnopqrstuvwxyz"
 
     ciphertext = ""
+    plaintext = plaintext.lower().replace(" ","")
 
     for i in range(len(plaintext)) :
         index = (m_prime * alphabet.find(plaintext[i]) + b_shift) % 26
@@ -137,6 +140,7 @@ def decryptAffine(plaintext, ciphertext, m_prime, b_shift) :
     alphabet = "abcdefghijklmnopqrstuvwxyz"
 
     plaintext = ""
+    ciphertext = ciphertext.replace(" ","").lower()
 
     m_inverse = 0
     for i in range(1,26) :
@@ -159,11 +163,13 @@ hill_trigram_list = []
 def encryptHill(plaintext, ciphertext, hill_key) :
     i=0
     matrix_process = []
+    hill_trigram_list = []
     hill_key_int = [ [ 0 for i in range(3) ] for j in range(3) ]
     sum = 0
 
     alphabet = "abcdefghijklmnopqrstuvwxyz"
     plaintext = plaintext.replace(' ','')
+    plaintext = plaintext.lower()
 
     for i in range(len(hill_key_int)) :
         for j in range(len(hill_key_int[0])) :
@@ -196,12 +202,14 @@ def decryptHill(plaintext, ciphertext, hill_key) :
     matrix_process = []
     hill_key_int = [ [ 0 for i in range(3) ] for j in range(3) ]
     alphabet = "abcdefghijklmnopqrstuvwxyz"
+    ciphertext = ciphertext.lower().replace(" ","")
+    hill_trigram_list = []
     i=0
+    print(ciphertext)
 
     for i in range(len(hill_key_int)) :
         for j in range(len(hill_key_int[0])) :
             hill_key_int[i][j] = int(hill_key[(i*2)+j+i])
-    print(hill_key_int)
 
     i=0
     while (i < len(ciphertext)) :
